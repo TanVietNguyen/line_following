@@ -89,19 +89,13 @@ void loop()
     if(sum > 17000 && spinCheck > 3){//Too many iterations. To meet this condition, the sum must be greater
       ChangeBaseSpeed(speed, 0);     //than 17000 for 4 iterations, which might not happen when the car is at 
                                      //the end. Consider lowering number of iterations. No need first condition.
-      delay(1000); //Why do we need to put a delay at this moment? Isn't the car already stopped? 
-      digitalWrite(left_dir_pin,LOW); //sets left to forward //The left is already set to forward in the begining?
       digitalWrite(right_dir_pin,HIGH); //set right to backwards
       ChangeBaseSpeed(0, speed);
-      analogWrite(left_pwm_pin, speed); //both are set to same speed
-      analogWrite(right_pwm_pin, speed);//Do we need these 2 functions? When calling ChangeBaseSpeed function,
-                                        //we already increase the speed.
 
       delay(1450); // THIS IS THE TIME FOR IT TO SPIN, CALIBRATED FOR 50 SPEED MUST CHANGE AS SPEED CHANGES
-                  // We don't need a delay here.
+                  // We don't need a dalay here.
       ChangeBaseSpeed(speed, 0);
-      delay(1000); //Isn't time for changing the speed already allocated in the function ChangeBaseSpeed?
-                  //So we don't need a delay here?
+     
       digitalWrite(right_dir_pin,LOW);
       ChangeBaseSpeed(0, speed);
       spinCheck = 0;
@@ -130,34 +124,3 @@ void loop()
     delay(30);
   } 
 } 
-
-void  ChangeWheelSpeeds(int initialLeftSpd, int finalLeftSpd, int initialRightSpd, int finalRightSpd) {
-/*  
- *   This function changes the car speed gradually (in about 30 ms) from initial
- *   speed to final speed. This non-instantaneous speed change reduces the load 
- *   on the plastic geartrain, and reduces the failure rate of the motors. 
- */
-  int diffLeft  = finalLeftSpd-initialLeftSpd;
-  int diffRight = finalRightSpd-initialRightSpd;
-  int stepIncrement = 20;
-  int numStepsLeft  = abs(diffLeft)/stepIncrement;
-  int numStepsRight = abs(diffRight)/stepIncrement;
-  int numSteps = max(numStepsLeft,numStepsRight);
-  
-  int pwmLeftVal = initialLeftSpd;        // initialize left wheel speed 
-  int pwmRightVal = initialRightSpd;      // initialize right wheel speed 
-  int deltaLeft = (diffLeft)/numSteps;    // left in(de)crement
-  int deltaRight = (diffRight)/numSteps;  // right in(de)crement
-
-  for(int k=0;k<numSteps;k++) {
-    pwmLeftVal = pwmLeftVal + deltaLeft;
-    pwmRightVal = pwmRightVal + deltaRight;
-    analogWrite(left_pwm_pin,pwmLeftVal);    
-    analogWrite(right_pwm_pin,pwmRightVal); 
-    delay(30);   
-  } // end for int k
-//  if(finalLeftSpd  == 0) analogWrite(left_pwm_pin,0); ;
-//  if(finalRightSpd == 0) analogWrite(right_pwm_pin,0);
-  analogWrite(left_pwm_pin,finalLeftSpd);  
-  analogWrite(right_pwm_pin,finalRightSpd);  
-}
