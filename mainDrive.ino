@@ -113,7 +113,7 @@ void loop()
     //if this seems like it backwards, its not. Due to the senor orientation this is our output.
     analogWrite(left_pwm_pin, speed - SV); //Prof. said we have to use ChangeBaseSpeed to avoid damaging
     analogWrite(right_pwm_pin, speed + SV);// the gears. He said he would take off points if we didn't use it.
-    //ChangeWheelSpeeds(speed, speed - SV, speed, speed + SV);
+    ChangeWheelSpeeds(speed, speed - SV, speed, speed + SV);
     newError = fusionValue;
  }
  
@@ -131,12 +131,12 @@ void loop()
   } 
 } 
 
-/* void  ChangeWheelSpeeds(int initialLeftSpd, int finalLeftSpd, int initialRightSpd, int finalRightSpd) {
+void  ChangeWheelSpeeds(int initialLeftSpd, int finalLeftSpd, int initialRightSpd, int finalRightSpd) {
 /*  
  *   This function changes the car speed gradually (in about 30 ms) from initial
  *   speed to final speed. This non-instantaneous speed change reduces the load 
  *   on the plastic geartrain, and reduces the failure rate of the motors. 
- 
+ */
   int diffLeft  = finalLeftSpd-initialLeftSpd;
   int diffRight = finalRightSpd-initialRightSpd;
   int stepIncrement = 20;
@@ -160,4 +160,4 @@ void loop()
 //  if(finalRightSpd == 0) analogWrite(right_pwm_pin,0);
   analogWrite(left_pwm_pin,finalLeftSpd);  
   analogWrite(right_pwm_pin,finalRightSpd);  
-}*/
+}
