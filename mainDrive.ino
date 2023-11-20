@@ -73,14 +73,17 @@ void loop()
     sum = sensorValues[0]+sensorValues[1]+sensorValues[2]+sensorValues[3]+sensorValues[4]+sensorValues[5]+sensorValues[6]+sensorValues[7];
     //If the car go through black area on the sides, both outermost sensors will read 2500
     //If this is the case, ignore these sensor values
-    if(sense1 == 2500 && sense8 == 2500)
+    /*if(sense1 == 2500 && sense8 == 2500)
     {
-      fusionValue = (sens2*(-14) + sens3*(-12) + sens4*(-8) + sens5*(8) + sens6*12 + sens7*14)/6;
-    }
+      if(sense7 < 1500 || sense2 < 1500) //1500 might be adjusted
+      {
+        fusionValue = (sens2*(-14) + sens3*(-12) + sens4*(-8) + sens5*(8) + sens6*12 + sens7*14)/6;
+      }
+    }*/
     //newError = fusionValue; This assignment should be here.
     oldError = newError; //This assignment should be at the end
 
-    deltaError = newError - oldError; //differnce in error position //This is always be 0!!!
+    deltaError = newError - oldError; //differnce in error position //This is always 0!!!
                                       //So We haven't been utilizing Kd yet
     SV = kp * fusionValue + kd * deltaError; // this is our steering value that will adjust motors
 
@@ -114,7 +117,7 @@ void loop()
     //if this seems like it backwards, its not. Due to the senor orientation this is our output.
     analogWrite(left_pwm_pin, speed - SV); //Prof. said we have to use ChangeBaseSpeed to avoid damaging
     analogWrite(right_pwm_pin, speed + SV);// the gears. He said he would take off points if we didn't use it.
-    ChangeWheelSpeeds(speed, speed - SV, speed, speed + SV);
+    //ChangeWheelSpeeds(speed, speed - SV, speed, speed + SV);
     newError = fusionValue; //This should move up to the place of oldError 
     //oldError = newError; This goes here
  }
