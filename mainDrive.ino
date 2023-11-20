@@ -89,19 +89,13 @@ void loop()
     if(sum > 17000 && spinCheck > 3){//Too many iterations. To meet this condition, the sum must be greater
       ChangeBaseSpeed(speed, 0);     //than 17000 for 4 iterations, which might not happen when the car is at 
                                      //the end. Consider lowering number of iterations. No need first condition.
-      delay(1000); //Why do we need to put a delay at this moment? Isn't the car already stopped? 
-      digitalWrite(left_dir_pin,LOW); //sets left to forward //The left is already set to forward in the begining?
       digitalWrite(right_dir_pin,HIGH); //set right to backwards
       ChangeBaseSpeed(0, speed);
-      analogWrite(left_pwm_pin, speed); //both are set to same speed
-      analogWrite(right_pwm_pin, speed);//Do we need these 2 functions? When calling ChangeBaseSpeed function,
-                                        //we already increase the speed.
 
       delay(1450); // THIS IS THE TIME FOR IT TO SPIN, CALIBRATED FOR 50 SPEED MUST CHANGE AS SPEED CHANGES
-                  // We don't need a dalay here.
+                  // We don't need a dalay here. //We do need the delay, this is time for spinning, if we get rid of it the car will turn les than a degree.
       ChangeBaseSpeed(speed, 0);
-      delay(1000); //Isn't time for changing the speed already allocated in the function ChangeBaseSpeed?
-                  //So we don't need a delay here?
+     
       digitalWrite(right_dir_pin,LOW);
       ChangeBaseSpeed(0, speed);
       spinCheck = 0;
