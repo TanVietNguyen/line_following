@@ -71,10 +71,17 @@ void loop()
     //get fusion output, currently there are two weighting scheme, 8-4-2-1,15-14-12-8, can be adjusted. 
     fusionValue = (sens1*(-15) + sens2*(-14) + sens3*(-12) + sens4*(-8) + sens5*(8) + sens6*12 + sens7*14 + sens8*15 )/8;
     sum = sensorValues[0]+sensorValues[1]+sensorValues[2]+sensorValues[3]+sensorValues[4]+sensorValues[5]+sensorValues[6]+sensorValues[7];
-  
-    oldError = newError;
+    //If the car go through black area on the sides, both outermost sensors will read 2500
+    //If this is the case, ignore these sensor values
+    if(sense1 == 2500 && sense8 == 2500)
+    {
+      fusionValue = (sens2*(-14) + sens3*(-12) + sens4*(-8) + sens5*(8) + sens6*12 + sens7*14)/6;
+    }
+    //newError = fusionValue; This assignment should be here.
+    oldError = newError; //This assignment should be at the end
 
-    deltaError = newError - oldError; //differnce in error position
+    deltaError = newError - oldError; //differnce in error position //This is always be 0!!!
+                                      //So We haven't been utilizing Kd yet
     SV = kp * fusionValue + kd * deltaError; // this is our steering value that will adjust motors
 
     //THIS IS OUR END OF TRACK 180 CONDITION
@@ -108,7 +115,8 @@ void loop()
     analogWrite(left_pwm_pin, speed - SV); //Prof. said we have to use ChangeBaseSpeed to avoid damaging
     analogWrite(right_pwm_pin, speed + SV);// the gears. He said he would take off points if we didn't use it.
     ChangeWheelSpeeds(speed, speed - SV, speed, speed + SV);
-    newError = fusionValue;
+    newError = fusionValue; //This should move up to the place of oldError 
+    //oldError = newError; This goes here
  }
  
  void ChangeBaseSpeed(int initialBaseSpd, int finalBaseSpd) {
