@@ -124,3 +124,33 @@ void loop()
     delay(30);
   } 
 } 
+void  ChangeWheelSpeeds(int initialLeftSpd, int finalLeftSpd, int initialRightSpd, int finalRightSpd) {
+/*  
+ *   This function changes the car speed gradually (in about 30 ms) from initial
+ *   speed to final speed. This non-instantaneous speed change reduces the load 
+ *   on the plastic geartrain, and reduces the failure rate of the motors. 
+ */
+  int diffLeft  = finalLeftSpd-initialLeftSpd;
+  int diffRight = finalRightSpd-initialRightSpd;
+  int stepIncrement = 20;
+  int numStepsLeft  = abs(diffLeft)/stepIncrement;
+  int numStepsRight = abs(diffRight)/stepIncrement;
+  int numSteps = max(numStepsLeft,numStepsRight);
+  
+  int pwmLeftVal = initialLeftSpd;        // initialize left wheel speed 
+  int pwmRightVal = initialRightSpd;      // initialize right wheel speed 
+  int deltaLeft = (diffLeft)/numSteps;    // left in(de)crement
+  int deltaRight = (diffRight)/numSteps;  // right in(de)crement
+
+  for(int k=0;k<numSteps;k++) {
+    pwmLeftVal = pwmLeftVal + deltaLeft;
+    pwmRightVal = pwmRightVal + deltaRight;
+    analogWrite(left_pwm_pin,pwmLeftVal);    
+    analogWrite(right_pwm_pin,pwmRightVal); 
+    delay(30);   
+  } // end for int k
+//  if(finalLeftSpd  == 0) analogWrite(left_pwm_pin,0); ;
+//  if(finalRightSpd == 0) analogWrite(right_pwm_pin,0);
+  analogWrite(left_pwm_pin,finalLeftSpd);  
+  analogWrite(right_pwm_pin,finalRightSpd);  
+}
