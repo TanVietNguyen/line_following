@@ -86,30 +86,33 @@ void loop()
     else{
       spinCheck = 0;  
     }
-    if(sum > 17000 && spinCheck > 3){
-      ChangeBaseSpeed(speed, 0);
-      
-      delay(1000);
-      digitalWrite(left_dir_pin,LOW); //sets left to forward
+    if(sum > 17000 && spinCheck > 3){//Too many iterations. To meet this condition, the sum must be greater
+      ChangeBaseSpeed(speed, 0);     //than 17000 for 4 iterations, which might not happen when the car is at 
+                                     //the end. Consider lowering number of iterations. No need first condition.
+      delay(1000); //Why do we need to put a delay at this moment? Isn't the car already stopped? 
+      digitalWrite(left_dir_pin,LOW); //sets left to forward //The left is already set to forward in the begining?
       digitalWrite(right_dir_pin,HIGH); //set right to backwards
       ChangeBaseSpeed(0, speed);
       analogWrite(left_pwm_pin, speed); //both are set to same speed
-      analogWrite(right_pwm_pin, speed);
+      analogWrite(right_pwm_pin, speed);//Do we need these 2 functions? When calling ChangeBaseSpeed function,
+                                        //we already increase the speed.
 
       delay(1450); // THIS IS THE TIME FOR IT TO SPIN, CALIBRATED FOR 50 SPEED MUST CHANGE AS SPEED CHANGES
+                  // We don't need a dalay here.
       ChangeBaseSpeed(speed, 0);
-      delay(1000);
+      delay(1000); //Isn't time for changing the speed already allocated in the function ChangeBaseSpeed?
+                  //So we don't need a delay here?
       digitalWrite(right_dir_pin,LOW);
       ChangeBaseSpeed(0, speed);
       spinCheck = 0;
     }
 
     //if we arent at the end of the track then we adjust our speed to for correction
-    digitalWrite(left_dir_pin,LOW);
-    digitalWrite(right_dir_pin,LOW);
+    digitalWrite(left_dir_pin,LOW); //Why do we need to set direction of both wheels forward here?
+    digitalWrite(right_dir_pin,LOW);//Aren't they already set up in the begining?
     //if this seems like it backwards, its not. Due to the senor orientation this is our output.
-    analogWrite(left_pwm_pin, speed - SV);
-    analogWrite(right_pwm_pin, speed + SV);
+    analogWrite(left_pwm_pin, speed - SV); //Prof. said we have to use ChangeBaseSpeed to avoid damaging
+    analogWrite(right_pwm_pin, speed + SV);// the gears. He said we would take off points if we didn't use it.
     
     newError = fusionValue;
  }
