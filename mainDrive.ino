@@ -98,7 +98,7 @@ void loop()
                                         //we already increase the speed.
 
       delay(1450); // THIS IS THE TIME FOR IT TO SPIN, CALIBRATED FOR 50 SPEED MUST CHANGE AS SPEED CHANGES
-                  // We don't need a dalay here.
+                  // We don't need a delay here.
       ChangeBaseSpeed(speed, 0);
       delay(1000); //Isn't time for changing the speed already allocated in the function ChangeBaseSpeed?
                   //So we don't need a delay here?
@@ -112,8 +112,8 @@ void loop()
     digitalWrite(right_dir_pin,LOW);//Aren't they already set up in the begining?
     //if this seems like it backwards, its not. Due to the senor orientation this is our output.
     analogWrite(left_pwm_pin, speed - SV); //Prof. said we have to use ChangeBaseSpeed to avoid damaging
-    analogWrite(right_pwm_pin, speed + SV);// the gears. He said we would take off points if we didn't use it.
-    
+    analogWrite(right_pwm_pin, speed + SV);// the gears. He said he would take off points if we didn't use it.
+    //ChangeWheelSpeeds(speed, speed - SV, speed, speed + SV);
     newError = fusionValue;
  }
  
@@ -130,3 +130,34 @@ void loop()
     delay(30);
   } 
 } 
+
+/* void  ChangeWheelSpeeds(int initialLeftSpd, int finalLeftSpd, int initialRightSpd, int finalRightSpd) {
+/*  
+ *   This function changes the car speed gradually (in about 30 ms) from initial
+ *   speed to final speed. This non-instantaneous speed change reduces the load 
+ *   on the plastic geartrain, and reduces the failure rate of the motors. 
+ 
+  int diffLeft  = finalLeftSpd-initialLeftSpd;
+  int diffRight = finalRightSpd-initialRightSpd;
+  int stepIncrement = 20;
+  int numStepsLeft  = abs(diffLeft)/stepIncrement;
+  int numStepsRight = abs(diffRight)/stepIncrement;
+  int numSteps = max(numStepsLeft,numStepsRight);
+  
+  int pwmLeftVal = initialLeftSpd;        // initialize left wheel speed 
+  int pwmRightVal = initialRightSpd;      // initialize right wheel speed 
+  int deltaLeft = (diffLeft)/numSteps;    // left in(de)crement
+  int deltaRight = (diffRight)/numSteps;  // right in(de)crement
+
+  for(int k=0;k<numSteps;k++) {
+    pwmLeftVal = pwmLeftVal + deltaLeft;
+    pwmRightVal = pwmRightVal + deltaRight;
+    analogWrite(left_pwm_pin,pwmLeftVal);    
+    analogWrite(right_pwm_pin,pwmRightVal); 
+    delay(30);   
+  } // end for int k
+//  if(finalLeftSpd  == 0) analogWrite(left_pwm_pin,0); ;
+//  if(finalRightSpd == 0) analogWrite(right_pwm_pin,0);
+  analogWrite(left_pwm_pin,finalLeftSpd);  
+  analogWrite(right_pwm_pin,finalRightSpd);  
+}*/
